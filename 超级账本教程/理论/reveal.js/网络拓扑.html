@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown data-background="#dddddd">
+                    ![联盟链架构图](images/联盟链架构图.png)
+                </section>
+                <section data-markdown>
+                    ## 背书节点(endorser peer)
+                    - 执行交易
+                      - org1: a=100
+                      - org2: a=200
+                    - 以上两笔交易在背书节点的执行结果都是正确的
+                </section>
+                <section data-markdown>
+                    # 排序节点
+                    - 排序节点看到的顺序: a=100;a=200
+                </section>
+                <section data-markdown>
+                    # 记账节点
+                    - 乐观锁
+                    - 读写集
+                    - {read: a=0, write: a=100}; {read: a=0, write:a=200}
+                    - a会被赋值为100
+                </section>
+                <section data-markdown>
+                    ```shell
+                    $ peer chaincode instantiate ...
+                    ```
+                    以上命令将会调用智能合约里的`Init`函数
+
+                    ```shell
+                    $ peer chaincode invoke ...
+                    ```
+                    以上命令将会调用`Invode`函数
+                </section>
+                <section data-markdown data-background="#dddddd">
+                    ![网络拓扑](images/超级账本网络拓扑.png)
+                </section>
+                <section data-markdown>
+                    ### 对等节点分类
+                    - 背书节点: 安装了chaincode的peer节点
+                    - 记账节点: 所有节点都是记账节点
+                    - 领导节点: 排序节点广播区块时先广播给领导节点，再由每个组织的领导节点广播给自己组织的对等节点
+                    - 锚节点: 和锚节点同一个组织的节点可以通过锚节点来发现属于同一个通道的其他组织的节点
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
